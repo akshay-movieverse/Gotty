@@ -14,8 +14,8 @@ RUN apt-get -y update && \
     rm -rf /var/lib/apt/lists*
 
 # Set up SSH
-RUN service ssh start && \
-    echo 'root:your_password' | chpasswd && \
+# Set up SSH
+RUN echo 'root:your_password' | chpasswd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
