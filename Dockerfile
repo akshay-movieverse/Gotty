@@ -14,9 +14,10 @@ RUN apt-get -y update && \
     rm -rf /var/lib/apt/lists*
 
 # Configure SSH
-RUN echo 'root:your_password' | chpasswd && \
-    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+# Copy initialization script
+COPY init_ssh.sh /init_ssh.sh
+RUN chmod +x /init_ssh.sh
+
 
     
 COPY /run_gotty.sh /run_gotty.sh
@@ -26,3 +27,5 @@ RUN chmod 744 /run_gotty.sh
 EXPOSE 8080 22
 
 CMD ["/bin/bash","/run_gotty.sh"]
+# Start the initialization script
+CMD ["/init_ssh.sh"]
