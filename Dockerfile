@@ -13,11 +13,17 @@ RUN apt-get -y update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists*
 
+# Set up SSH
+RUN service ssh start && \
+    echo 'root:your_password' | chpasswd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
+    
 COPY /run_gotty.sh /run_gotty.sh
 
 RUN chmod 744 /run_gotty.sh
 
-EXPOSE 8080
+EXPOSE 8080 22
 
 CMD ["/bin/bash","/run_gotty.sh"]
